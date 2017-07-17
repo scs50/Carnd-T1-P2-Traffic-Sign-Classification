@@ -37,10 +37,6 @@ The goals / steps of this project are the following:
 ---
 ###Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
-
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
-
 ###Data Set Summary & Exploration
 
 ####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
@@ -54,6 +50,7 @@ signs data set:
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 * The minimum number of signs in a training class is 180 and the max is 2010
+
 ####2. Include an exploratory visualization of the dataset.
 
 Here is an exploratory visualization of the data set. 
@@ -68,34 +65,49 @@ It is a bar chart showing how the data distrubution
 
 ####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I tried to convert the images to grayscale. I was successfully able to do this on the test images, however when I tried to grayscale my new images from the internet and classify them with my model, I had trouble getting them to be the required size (5, 32, 32, 1) becuase after I converted them to grayscale they would be (5, 32, 32). Since I could not figure out how to do this, I did not convert the images to grayscale even though my model performed better on the training and validation images if they were grayscale.
+As a first step, I converted the images to grayscale. I did this so the model did not have to worry about color of the stop signs and it could solely focus on the features of each sign. This would result in a better model results in the training and validation data.
 
-The only preprocessing I did was to normalized the image data because the model performes best (required) on data that has zero mean and equal variance. 
+The other preprocessing I did was to normalized the image data because the model performes best (required) on data that has zero mean and equal variance. This is due to the fact that during the process of training our network, we multiply(weights) and add (biases) to these initial inputs in order to cause activations that we then backpropogate with the gradients to train the model.
 
-The data set was also shuffled before training to remove order which is not important.
+We'd like in this process for each feature to have a similar range so that our gradients don't go out of control and that we only need one global learning rate multiplier.
+
+The data set was also shuffled before training so that the model would not consider the order of the images a feature to learn.
 
 I explored the idea of generating additional test images by roatating, scaling, distorting the original testing database, but since my model was already meeting the performance criteria, I decided it wasn't needed.
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-My final model was the LeNet architecture which consisted of the following layers:
+My final model used the LeNet architecture as a started point but then another addtional 5x5 convolutional layer was added along with replacing subsampling with max pooling. It then flattened the output of the final convolutional layer and fed that into 3 fully connected layers with a 50% dropout between all but the final output layer. Relu activation was used.
 
-![alt text][image10]
+My final architecture consisted of the following layers:
+
 
 Architecture
+
 Layer 1: Convolutional. Input = 32x32x1. 5x5 Conv Output = 28x28x6.
+
 Activation. Relu
+
 Pooling. max pool -> Output 14x14x6.
+
 Layer 2: Convolutional. Input 14x14x6
+
 Activation. Relu
+
 Pooling. Max pool -. Output 5x5x16
+
 Layer 2a: Conv 5x5
+
 Flatten. Flatten the output shape of the final pooling layer such that it's 1D instead of 3D. Output = 412
 
 Layer 3: Fully Connected. In 412 Out 122
+
 Activation. relu
+
 Layer 4: Fully Connected. In 122 Out 84 
+
 Activation. relu
+
 Layer 5: Fully Connected (Logits). In 84 Out 43 classes
 
 Return the result of Layer 5
@@ -107,9 +119,9 @@ To train the model, I used a batch size of 126 for 10 epochs and a learning rate
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of 0.995
-* validation set accuracy of 0.940
-* test set accuracy of 0.931
+* training set accuracy of 0.994
+* validation set accuracy of 0.941
+* test set accuracy of 0.923
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
@@ -117,7 +129,7 @@ LeNet
 * What were some problems with the initial architecture?
 Poor performance
 * How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-I added an extra convolutional layer along with adding dropout between the last two layers. It was changed due to underfitting and poor accuracy on both the training and validation sets.
+I added an extra convolutional layer along with adding dropout between the last two layers and replacing subsampling with max pooling. It was changed due to underfitting and poor accuracy on both the training and validation sets.
 
 * Which parameters were tuned? How were they adjusted and why?
 

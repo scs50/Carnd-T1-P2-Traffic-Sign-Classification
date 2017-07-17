@@ -1,2 +1,2 @@
-model_checkpoint_path: "lenet"
-all_model_checkpoint_paths: "lenet"
+model_checkpoint_path: "ScS_Traffic_Sign_Class"
+all_model_checkpoint_paths: "ScS_Traffic_Sign_Class"
